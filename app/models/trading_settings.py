@@ -8,7 +8,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, Float, JSON, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from .database import Base
+from app.core.database import Base
 
 
 class TradingSettings(Base):
@@ -63,6 +63,15 @@ class TradingSettings(Base):
         "condition_formula_ids": [],  # DEPRECATED: 매도 전용 조건식 (하위 호환)
         "partial_exit_enabled": False,
         "partial_exit_ratios": [0.5, 0.5]
+    })
+    
+    # 트레일링 스탑 설정
+    trailing_stop_config = Column(JSON, default={
+        "enabled": False,
+        "trailing_percent": 0.05,
+        "activation_profit": 0.03,
+        "min_profit_lock": 0.01,
+        "timeframe": "5m"
     })
     
     # 조건검색식 분리 (매수/매도 전용)

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 import os
 import logging
 
-from ..models.database import get_db
+from ..core.database import get_db
 from ..models.user import User, Subscription
 from ..core.security import get_current_user
 

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
 
-from ..models.database import get_db
+from ..core.database import get_db
 from ..models.user import User
 from ..models.commission import Commission, CommissionStatus, Referral
 from ..schemas.commission import CommissionResponse, CommissionStatsResponse

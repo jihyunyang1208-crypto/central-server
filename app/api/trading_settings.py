@@ -6,14 +6,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import Optional
 
-from ..models.database import get_db
+from ..core.database import get_db
 from ..models.user import User, Subscription
 from ..models.trading_settings import TradingSettings
 from ..models.commission import SubscriptionPlan
 from ..schemas.trading_settings import (
     TradingSettingsResponse,
     TradingSettingsUpdate,
-    TradingSettingsCreate
+    TradingSettingsCreate,
+    TrailingStopConfig
 )
 from ..core.security import get_current_user
 
@@ -168,3 +169,59 @@ async def create_trading_settings(
     db.refresh(settings)
     
     return settings
+    
+    return settings
+
+
+@router.get("/trailing-stop", response_model=TrailingStopConfig)
+async def get_trailing_stop_settings(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """트레일링 스탑 설정 조회"""
+    settings = db.query(TradingSettings).filter(
+        TradingSettings.user_id == current_user.id
+    ).first()
+    
+    if not settings:
+        # 없으면 기본값 생성
+        settings = TradingSettings(user_id=current_user.id)
+        db.add(settings)
+        db.commit()
+        db.refresh(settings)
+        
+    # JSON 컬럼에서 로드
+    conf = settings.trailing_stop_config
+    if not conf:
+        conf = {
+            "enabled": False,
+            "trailing_percent": 0.05,
+            "activation_profit": 0.03,
+            "min_profit_lock": 0.01,
+            "timeframe": "5m"
+        }
+    return conf
+
+
+@router.put("/trailing-stop", response_model=TrailingStopConfig)
+async def update_trailing_stop_settings(
+    ts_config: TrailingStopConfig,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """트레일링 스탑 설정 업데이트"""
+    settings = db.query(TradingSettings).filter(
+        TradingSettings.user_id == current_user.id
+    ).first()
+    
+    if not settings:
+        settings = TradingSettings(user_id=current_user.id)
+        db.add(settings)
+    
+    # 덮어쓰기
+    settings.trailing_stop_config = ts_config.dict()
+    
+    db.commit()
+    db.refresh(settings)
+    
+    return settings.trailing_stop_config

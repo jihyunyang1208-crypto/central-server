@@ -46,6 +46,16 @@ class ProSellConfig(BaseModel):
     partial_exit_ratios: List[float] = Field(default=[0.5, 0.5], description="분할 청산 비율")
 
 
+class TrailingStopConfig(BaseModel):
+    """트레일링 스탑 설정"""
+    enabled: bool = Field(default=False, description="사용 여부")
+    trailing_percent: float = Field(default=0.05, ge=0.001, le=1.0, description="트레일링 간격 (예: 0.05 = 5%)")
+    activation_profit: float = Field(default=0.03, ge=0.0, description="활성화 수익률 (예: 0.03 = 3%)")
+    min_profit_lock: float = Field(default=0.01, ge=0.0, description="최소 보전 수익률")
+    timeframe: str = Field(default="5m", description="감시 타임프레임")
+
+
+
 class TradingSettingsBase(BaseModel):
     """트레이딩 설정 기본"""
     auto_buy: bool = True
@@ -56,6 +66,8 @@ class TradingSettingsBase(BaseModel):
     pro_buy_config: Optional[ProBuyConfig] = None
     standard_sell_config: Optional[StandardSellConfig] = None
     pro_sell_config: Optional[ProSellConfig] = None
+    trailing_stop_config: Optional[TrailingStopConfig] = None
+    max_active_strategies: int = Field(default=5, ge=1, le=100)
     max_active_strategies: int = Field(default=5, ge=1, le=100)
     buy_condition_formulas: List[str] = Field(default=[], description="매수 전용 조건검색식 ID 리스트")
     sell_condition_formulas: List[str] = Field(default=[], description="매도 전용 조건검색식 ID 리스트")
@@ -76,6 +88,8 @@ class TradingSettingsUpdate(BaseModel):
     pro_buy_config: Optional[Dict[str, Any]] = None
     standard_sell_config: Optional[Dict[str, Any]] = None
     pro_sell_config: Optional[Dict[str, Any]] = None
+    trailing_stop_config: Optional[Dict[str, Any]] = None
+    max_active_strategies: Optional[int] = Field(None, ge=1, le=100)
     max_active_strategies: Optional[int] = Field(None, ge=1, le=100)
     buy_condition_formulas: Optional[List[str]] = Field(None, description="매수 전용 조건검색식 ID 리스트")
     sell_condition_formulas: Optional[List[str]] = Field(None, description="매도 전용 조건검색식 ID 리스트")

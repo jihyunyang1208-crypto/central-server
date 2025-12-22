@@ -57,7 +57,7 @@ try:
         
         # 2. Create all tables using SQLAlchemy models
         print("\n[Step 2/3] Creating all tables from models...")
-        from app.models.database import Base, init_db
+        from app.core.database import Base, init_db
         
         # Import all models to register them with Base
         from app.models import user, commission, kiwoom, trading_settings

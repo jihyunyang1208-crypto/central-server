@@ -8,7 +8,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from .database import Base
+from app.core.database import Base
 
 
 class KiwoomCredential(Base):

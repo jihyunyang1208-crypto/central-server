@@ -5,7 +5,7 @@ from datetime import datetime
 import secrets
 import string
 
-from ..models.database import get_db
+from ..core.database import get_db
 from ..models.user import User
 from ..models.commission import Referral, ReferralStatus
 from ..schemas.user import UserCreate, UserLogin, UserResponse, TokenResponse

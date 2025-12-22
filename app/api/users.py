@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from ..models.database import get_db
+from ..core.database import get_db
 from ..models.user import User
 from ..models.commission import Referral, ReferralStatus
 from ..schemas.user import UserResponse
@@ -48,4 +48,24 @@ def get_referral_stats(
     return {
         "total_referrals": total_referrals,
         "active_referrals": active_referrals
+    }
+
+
+@router.get("/me/referral-link")
+def get_referral_link(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    현재 사용자의 추천 링크 정보 조회
+    """
+    if not current_user.referral_code:
+        raise HTTPException(status_code=404, detail="Referral code not found")
+    
+    # 추천 링크 생성 (프론트엔드 URL + ref 파라미터)
+    base_url = "http://localhost:19006"  # TODO: 환경변수로 관리
+    referral_url = f"{base_url}?ref={current_user.referral_code}"
+    
+    return {
+        "referral_code": current_user.referral_code,
+        "referral_url": referral_url
     }

@@ -8,7 +8,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from .config import settings
-from ..models.database import get_db
+from .database import get_db
 from ..models.user import User
 
 # 비밀번호 해싱 (bcrypt 대신 argon2 사용 - 더 강력함)

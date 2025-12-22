@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, E
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
-from .database import Base
+from app.core.database import Base
 
 class User(Base):
     """사용자 테이블 - 인증 및 기본 정보"""
@@ -17,6 +17,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
     is_email_verified = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False, comment="Admin dashboard access")
     
     # 추천 시스템
     referral_code = Column(String, unique=True, index=True, nullable=True, comment="내 추천 코드")
@@ -26,6 +27,7 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     last_login_at = Column(DateTime, nullable=True)
+    last_active_at = Column(DateTime, nullable=True, index=True, comment="Last activity timestamp")
     
     # Relationships
     subscription = relationship("Subscription", back_populates="user", uselist=False)

@@ -8,7 +8,7 @@ import logging
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from app.models.user import Subscription, User
-from app.models.database import get_db
+from app.core.database import get_db
 import os
 
 logger = logging.getLogger(__name__)

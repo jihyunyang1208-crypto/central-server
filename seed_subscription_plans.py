@@ -3,7 +3,7 @@
 구독 플랜 시드 데이터 생성 스크립트
 FREE, STANDARD, PRO 플랜을 데이터베이스에 추가합니다.
 """
-from app.models.database import SessionLocal
+from app.core.database import SessionLocal
 from app.models.commission import SubscriptionPlan
 
 def seed_plans():

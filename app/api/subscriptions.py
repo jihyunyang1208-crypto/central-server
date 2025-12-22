@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from typing import List
 
-from ..models.database import get_db
+from ..core.database import get_db
 from ..models.user import User, Subscription, SubscriptionStatus
 from ..models.commission import SubscriptionPlan, Referral, ReferralStatus
 from ..schemas.subscription import (

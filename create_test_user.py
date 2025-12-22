@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 # 프로젝트 루트를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from app.models.database import SessionLocal
+from app.core.database import SessionLocal
 from app.models.user import User, Subscription, SubscriptionStatus
 from app.models.commission import SubscriptionPlan
 from app.core.security import get_password_hash

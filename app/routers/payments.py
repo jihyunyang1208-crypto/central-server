@@ -11,7 +11,7 @@ import os
 import httpx
 import logging
 
-from app.models.database import get_db
+from app.core.database import get_db
 from app.models.user import Subscription, User
 from app.models.commission import SubscriptionPlan
 from app.api.auth import get_current_user

@@ -7,7 +7,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import asyncio
 import logging
-from app.models.database import get_db
+from app.core.database import get_db
 from app.services.auto_payment import check_and_process_renewals
 
 logger = logging.getLogger(__name__)
