@@ -12,6 +12,7 @@ import logging
 from .core.config import settings
 from .core.database import init_db
 from .api import auth_router, subscriptions_router, commissions_router, users_router, kiwoom_router, trading_settings_router
+from .api.support import router as support_router
 from .api.admin import router as admin_router
 from .routers.payments import router as payments_router
 from .routers.billing import router as billing_router
@@ -51,6 +52,13 @@ app.include_router(trading_settings_router)
 app.include_router(payments_router)
 app.include_router(billing_router)
 app.include_router(admin_router)
+app.include_router(support_router)
+
+# [NEW] Agent 관련 라우터
+from .routers.agent_ws import router as agent_ws_router
+from .routers.agent_control import router as agent_control_router
+app.include_router(agent_ws_router)
+app.include_router(agent_control_router)
 
 
 @app.on_event("startup")

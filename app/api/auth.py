@@ -135,32 +135,24 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     access_token = create_access_token(data={"sub": str(user.id)})
     refresh_token = create_refresh_token(data={"sub": str(user.id)})
     
-    # [NEW] AutoTrader에 START_TRADING 명령 전송
-    import httpx
-    import os
+    # [NEW] Agent에 워커 시작 명령 전송
     import logging
-    
     logger = logging.getLogger(__name__)
     
     try:
-        autotrader_url = os.getenv("AUTOTRADER_URL", "http://localhost:8000")
+        from ..routers.agent_ws import send_command_to_agent, is_agent_connected
         
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                f"{autotrader_url}/api/v1/trading/start",
-                json={"user_token": access_token},
-                headers={"Authorization": f"Bearer {access_token}"},
-                timeout=5.0
-            )
+        user_id_str = str(user.id)
+        
+        if is_agent_connected(user_id_str):
+            await send_command_to_agent(user_id_str, "start_workers")
+            logger.info(f"✅ Start command sent to Agent for user {user.id}")
+        else:
+            logger.warning(f"⚠️ Agent not connected for user {user.id}")
             
-            if response.status_code == 200:
-                logger.info(f"✅ START_TRADING sent to AutoTrader for user {user.id}")
-            else:
-                logger.warning(f"⚠️ START_TRADING failed: {response.status_code}")
-                
     except Exception as e:
-        # Don't fail login if START_TRADING fails
-        logger.error(f"❌ Failed to send START_TRADING: {e}")
+        # Don't fail login if Agent command fails
+        logger.error(f"❌ Failed to send command to Agent: {e}")
     
     return {
         "access_token": access_token,
@@ -231,6 +223,7 @@ def verify_token(
     return {
         "user_id": current_user.id,
         "email": current_user.email,
+        "is_admin": current_user.is_admin,
         "subscription_active": subscription_active,
         "expires_at": expires_at,
         "plan_type": subscription.plan.name if subscription and subscription.plan else None

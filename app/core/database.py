@@ -5,11 +5,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from typing import Generator
 
-# Load environment variables
-env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "AutoTrader", ".env")
-load_dotenv(dotenv_path=env_path)
+from ..core.config import settings
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = settings.DATABASE_URL
 
 if not DATABASE_URL:
     print("WARNING: DATABASE_URL not set. Falling back to SQLite.")
@@ -37,5 +35,5 @@ def get_db() -> Generator:
 def init_db():
     """모든 테이블 생성"""
     # 모든 모델 import (테이블 생성을 위해)
-    from ..models import user, commission, kiwoom, trading_settings
+    from ..models import user, commission, kiwoom, trading_settings, support
     Base.metadata.create_all(bind=engine)
