@@ -25,9 +25,17 @@ python-dotenv>=1.0.0
 
 # Utilities
 python-dateutil>=2.8.0
+pandas>=2.0.0
 
 # Scheduling (for commission calculator)
 apscheduler>=3.10.0
+
+# Financial Data Collection
+OpenDartReader>=0.1.8
+finance-datareader>=0.9.50
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+requests>=2.31.0
 
 # Testing (optional)
 pytest>=7.4.0

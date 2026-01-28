@@ -57,8 +57,14 @@ app.include_router(support_router)
 # [NEW] Agent 관련 라우터
 from .routers.agent_ws import router as agent_ws_router
 from .routers.agent_control import router as agent_control_router
+from .api.system_config import system_router
 app.include_router(agent_ws_router)
 app.include_router(agent_control_router)
+app.include_router(system_router)
+
+# [NEW] Financial Data 라우터 (백테스팅 DB 수집)
+from .routers.financial_data import router as financial_data_router
+app.include_router(financial_data_router)
 
 
 @app.on_event("startup")
@@ -74,6 +80,11 @@ async def startup_event():
     from .scheduler import start_scheduler
     start_scheduler()
     
+    # 데이터 수집 스케줄러 시작
+    from .services.data_scheduler import start_data_scheduler
+    start_data_scheduler()
+    logger.info("✅ Data collection scheduler started")
+    
     logger.info(f"✅ Server ready on http://{settings.HOST}:{settings.PORT}")
 
 
@@ -81,6 +92,11 @@ async def startup_event():
 async def shutdown_event():
     """서버 종료 시 실행"""
     logger.info("🛑 Server shutting down...")
+    
+    # 데이터 수집 스케줄러 중지
+    from .services.data_scheduler import stop_data_scheduler
+    stop_data_scheduler()
+    logger.info("✅ Data collection scheduler stopped")
 
 
 @app.get("/")

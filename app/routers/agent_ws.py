@@ -68,12 +68,18 @@ async def send_command_to_agent(user_id: str, command: str, data: dict = None):
     """특정 Agent에 명령 전송"""
     websocket = connected_agents.get(user_id)
     
+    # [NEW] Fallback to unbound agent (First-Connect scenario)
+    if not websocket:
+        websocket = connected_agents.get("unbound")
+        if websocket:
+            logger.info(f"Target agent {user_id} not found. Using fallback 'unbound' agent.")
+    
     if not websocket:
         raise HTTPException(status_code=404, detail=f"Agent not connected for user {user_id}")
     
     message = {
         "command": command,
-        **(data or {})
+        "data": data or {}
     }
     
     try:

@@ -144,11 +144,10 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
         
         user_id_str = str(user.id)
         
-        if is_agent_connected(user_id_str):
-            await send_command_to_agent(user_id_str, "start_workers")
-            logger.info(f"✅ Start command sent to Agent for user {user.id}")
-        else:
-            logger.warning(f"⚠️ Agent not connected for user {user.id}")
+        # [MODIFIED] Try sending command directly (agent_ws handles fallback to 'unbound')
+        # Also passing user_id in data payload so Agent knows who to bind to.
+        await send_command_to_agent(user_id_str, "start_workers", data={"user_id": user_id_str})
+        logger.info(f"✅ Start command sent to Agent for user {user.id}")
             
     except Exception as e:
         # Don't fail login if Agent command fails
