@@ -29,11 +29,18 @@ class User(Base):
     last_login_at = Column(DateTime, nullable=True)
     last_active_at = Column(DateTime, nullable=True, index=True, comment="Last activity timestamp")
     
+    # 봇 연결 정보
+    bot_server_url = Column(String, nullable=True, comment="User's local AutoTrader URL (e.g. Cloudflare Tunnel)")
+    
     # Relationships
     subscription = relationship("Subscription", back_populates="user", uselist=False)
     referrals_made = relationship("Referral", foreign_keys="Referral.referrer_id", back_populates="referrer")
     referrals_received = relationship("Referral", foreign_keys="Referral.referred_id", back_populates="referred")
     commissions = relationship("Commission", back_populates="user")
+    
+    @property
+    def user_id(self):
+        return self.id
 
 
 class SubscriptionStatus(str, enum.Enum):

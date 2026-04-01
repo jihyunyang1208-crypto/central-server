@@ -65,7 +65,9 @@ def create_kiwoom_credential(
         alias=credential_data.alias,
         app_key=encrypted_app_key,
         secret_key=encrypted_secret_key,
-        is_main=credential_data.is_main
+        is_main=credential_data.is_main,
+        is_condition_linked=credential_data.is_condition_linked,
+        is_report_linked=credential_data.is_report_linked
     )
     
     db.add(new_credential)
@@ -116,7 +118,9 @@ def get_decrypted_credentials(
             app_key=decrypt_credential(cred.app_key),
             secret_key=decrypt_credential(cred.secret_key),
             is_main=cred.is_main,
-            is_active=cred.is_active
+            is_active=cred.is_active,
+            is_condition_linked=cred.is_condition_linked,
+            is_report_linked=cred.is_report_linked
         ))
     
     return decrypted_list
@@ -187,6 +191,12 @@ def update_kiwoom_credential(
     
     if update_data.is_active is not None:
         credential.is_active = update_data.is_active
+        
+    if update_data.is_condition_linked is not None:
+        credential.is_condition_linked = update_data.is_condition_linked
+        
+    if update_data.is_report_linked is not None:
+        credential.is_report_linked = update_data.is_report_linked
     
     db.commit()
     db.refresh(credential)

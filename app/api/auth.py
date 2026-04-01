@@ -108,24 +108,17 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
             detail="Inactive user account"
         )
     
-    # [NEW] 구독 상태 확인
+    # [MODIFIED] 구독 상태 확인 - 로그인은 항상 허용, 구독 상태만 응답에 포함
     from ..models.user import Subscription
     subscription = db.query(Subscription).filter(
         Subscription.user_id == user.id
     ).first()
     
-    if not subscription:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="No active subscription found"
-        )
-    
-    # 구독 만료 확인
-    if subscription.expires_at and subscription.expires_at < datetime.utcnow():
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Subscription expired"
-        )
+    subscription_active = False
+    if subscription and subscription.expires_at:
+        subscription_active = subscription.expires_at > datetime.utcnow()
+    elif subscription and not subscription.expires_at:
+        subscription_active = True  # 만료일 없는 구독은 영구 활성
     
     # 마지막 로그인 시간 업데이트
     user.last_login_at = datetime.utcnow()
@@ -156,7 +149,8 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "subscription_active": subscription_active,
     }
 
 

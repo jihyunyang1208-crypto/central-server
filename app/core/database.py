@@ -35,5 +35,5 @@ def get_db() -> Generator:
 def init_db():
     """모든 테이블 생성"""
     # 모든 모델 import (테이블 생성을 위해)
-    from ..models import user, commission, kiwoom, trading_settings, support
+    from ..models import user, commission, kiwoom, trading_settings, support, community
     Base.metadata.create_all(bind=engine)

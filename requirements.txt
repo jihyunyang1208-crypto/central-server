@@ -26,6 +26,7 @@ python-dotenv>=1.0.0
 # Utilities
 python-dateutil>=2.8.0
 pandas>=2.0.0
+feedparser>=6.0.10
 
 # Scheduling (for commission calculator)
 apscheduler>=3.10.0

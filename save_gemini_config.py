@@ -23,10 +23,10 @@ def save_gemini_config(api_key: str, model_priority: list = None):
     
     Args:
         api_key: Gemini API 키
-        model_priority: 모델 우선순위 리스트 (기본값: ["gemini-1.5-flash"])
+        model_priority: 모델 우선순위 리스트 (기본값: ["gemini-2.5-flash"])
     """
     if model_priority is None:
-        model_priority = ["gemini-1.5-flash"]
+        model_priority = ["gemini-2.5-flash"]
     
     db: Session = SessionLocal()
     
@@ -62,7 +62,7 @@ def save_gemini_config(api_key: str, model_priority: list = None):
         
         models_value = {
             "preferred_models": model_priority,
-            "fallback_model": model_priority[0] if model_priority else "gemini-1.5-flash"
+            "fallback_model": model_priority[0] if model_priority else "gemini-2.5-flash"
         }
         
         if models_config:
@@ -107,8 +107,8 @@ if __name__ == "__main__":
     init_db()
     
     # 새 API 키 설정
-    NEW_API_KEY = "AIzaSyAZmw8_gNu7m20OZrfm5xWa9e17gSBSL_8"
-    MODEL_PRIORITY = ["gemini-1.5-flash", "gemini-1.5-pro"]
+    NEW_API_KEY = "AIzaSyC0u6JBqTa_mm5AXud47Nzp9FiHEnAIZ9Q"
+    MODEL_PRIORITY = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-3-flash"]
     
     logger.info("=" * 60)
     logger.info("Saving Gemini API configuration to Central Backend DB")

@@ -68,7 +68,7 @@ async def get_gemini_models(db: Session = Depends(get_db)):
         if not config:
             # 기본값 반환
             return GeminiModelsResponse(
-                preferred_models=["gemini-3-flash", "gemini-2.5-flash"],
+                preferred_models=["gemini-2.5-flash", "gemini-2.5-flash-exp"],
                 fallback_model="gemini-2.5-flash",
                 updated_at=None,
                 updated_by=None
@@ -76,7 +76,7 @@ async def get_gemini_models(db: Session = Depends(get_db)):
         
         value = config.config_value
         return GeminiModelsResponse(
-            preferred_models=value.get("preferred_models", ["gemini-3-flash"]),
+            preferred_models=value.get("preferred_models", ["gemini-2.5-flash"]),
             fallback_model=value.get("fallback_model", "gemini-2.5-flash"),
             updated_at=config.updated_at.isoformat() if config.updated_at else None,
             updated_by=config.updated_by
@@ -267,7 +267,7 @@ async def get_gemini_config(db: Session = Depends(get_db)):
         ).first()
         
         # 기본값
-        model_priority = ["gemini-2.5-flash", "gemini-1.5-flash"]
+        model_priority = ["gemini-2.5-flash", "gemini-2.5-flash-exp"]
         api_keys = {}
         
         if models_config:

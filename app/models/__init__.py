@@ -5,6 +5,7 @@ from .commission import Referral, Commission, SubscriptionPlan, CommissionRate
 from .support import SupportInquiry
 from .financial_data import StockInfo, DailyPrice, FinancialStatement, Disclosure, DataCollectionLog
 from .system_config import SystemConfig
+from .macro_analysis import MacroAnalysisReport
 
 __all__ = [
     "Base",
@@ -25,4 +26,5 @@ __all__ = [
     "Disclosure",
     "DataCollectionLog",
     "SystemConfig",
+    "MacroAnalysisReport",
 ]

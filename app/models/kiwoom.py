@@ -29,6 +29,8 @@ class KiwoomCredential(Base):
     # 상태
     is_main = Column(Boolean, default=False, comment="메인 계좌 여부")
     is_active = Column(Boolean, default=True, comment="활성화 상태")
+    is_condition_linked = Column(Boolean, default=False, comment="조건검색 연동 여부")
+    is_report_linked = Column(Boolean, default=False, comment="매매일지 연동 여부")
     
     # 타임스탬프
     created_at = Column(DateTime, default=datetime.utcnow)

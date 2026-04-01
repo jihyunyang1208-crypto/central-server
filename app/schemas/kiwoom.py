@@ -14,6 +14,8 @@ class KiwoomCredentialCreate(BaseModel):
     app_key: str
     secret_key: str
     is_main: bool = False
+    is_condition_linked: bool = False
+    is_report_linked: bool = False
 
 
 class KiwoomCredentialUpdate(BaseModel):
@@ -23,6 +25,8 @@ class KiwoomCredentialUpdate(BaseModel):
     secret_key: Optional[str] = None
     is_main: Optional[bool] = None
     is_active: Optional[bool] = None
+    is_condition_linked: Optional[bool] = None
+    is_report_linked: Optional[bool] = None
 
 
 class KiwoomCredentialResponse(BaseModel):
@@ -33,6 +37,8 @@ class KiwoomCredentialResponse(BaseModel):
     alias: Optional[str]
     is_main: bool
     is_active: bool
+    is_condition_linked: bool
+    is_report_linked: bool
     created_at: datetime
     updated_at: datetime
     
@@ -49,3 +55,5 @@ class KiwoomCredentialDecrypted(BaseModel):
     secret_key: str  # 복호화됨
     is_main: bool
     is_active: bool
+    is_condition_linked: bool
+    is_report_linked: bool

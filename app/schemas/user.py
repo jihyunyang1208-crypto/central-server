@@ -20,10 +20,12 @@ class UserLogin(BaseModel):
 
 class UserResponse(UserBase):
     id: int
+    user_id: int
     is_active: bool
     is_admin: bool
     is_email_verified: bool
     referral_code: Optional[str]
+    bot_server_url: Optional[str] = None
     created_at: datetime
     
     class Config:
@@ -34,3 +36,4 @@ class TokenResponse(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+    subscription_active: Optional[bool] = None

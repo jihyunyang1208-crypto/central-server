@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # JWT 설정
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 5256000
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
     # 암호화 키 (브로커 인증 정보 암호화용)
@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     # 결제 웹훅 (추후 설정)
     STRIPE_WEBHOOK_SECRET: Optional[str] = None
     TOSS_WEBHOOK_SECRET: Optional[str] = None
+
+    # AI API 설정
+    GEMINI_API_KEY: Optional[str] = None
+    FRED_API_KEY: Optional[str] = None
     
     class Config:
         env_file = ".env"  # 현재 디렉토리의 .env 파일 사용
